@@ -1,0 +1,17 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  (1..3).each do |i|
+      config.vm.define "nginx_#{i}" do |nginx|
+          nginx.vm.box = "oraclelinux/7"
+          nginx.vm.box_url = "https://oracle.github.io/vagrant-projects/boxes/oraclelinux/7.json"
+          nginx.vm.network "private_network", name: "vboxnet0", ip: "192.168.56.2#{i}"
+          nginx.vm.hostname = "nginx-#{i}"
+          # nginx.ssh.insert_key = false
+          # nginx.ssh.private_key_path = ['~/.vagrant.d/insecure_private_key', '~/.ssh/id_rsa']
+          # nginx.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+          nginx.vm.provision "shell", path: "nginx.sh"
+      end
+  end
+end
